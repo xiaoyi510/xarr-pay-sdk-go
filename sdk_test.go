@@ -6,7 +6,7 @@ import (
 )
 
 func getSdk() *XArrPay {
-	return New("http://127.0.0.1:24017", 10000, "")
+	return New("http://127.0.0.1:24017", 10000, "fc5778SmmANqnfoKosgz")
 
 }
 
@@ -15,10 +15,10 @@ func TestCreateOrder(t *testing.T) {
 
 	orderReq := &OrderCreateReq{
 		PayType:    PAY_TYPE_ALIPAY,
-		OutTradeNo: "123456222y",
+		OutTradeNo: "123456222yr",
 		NotifyUrl:  "",
 		ReturnUrl:  "",
-		Name:       "测试支付",
+		Name:       "测试支付2",
 		Money:      "1.2",
 		ClientIp:   "",
 		Device:     "",
