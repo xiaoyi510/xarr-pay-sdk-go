@@ -1,5 +1,11 @@
 package xarr_pay_sdk
 
+type ResponseData struct {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
 // 创建订单
 type OrderCreateReq struct {
 	Pid        int32  `p:"pid" json:"pid" v:"required#必填商户ID"`                    // 商户ID
@@ -17,37 +23,43 @@ type OrderCreateReq struct {
 
 // 创建订单响应
 type OrderCreateRes struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    struct {
-		TradeNo    string `json:"trade_no"`     // 平台支付订单号
-		OutTradeNo string `json:"out_trade_no"` // 商户订单号
-		ExpireTime int    `json:"expire_time"`  // 订单支付超时时间
+	TradeNo    string `json:"trade_no"`     // 平台支付订单号
+	OutTradeNo string `json:"out_trade_no"` // 商户订单号
+	ExpireTime int    `json:"expire_time"`  // 订单支付超时时间
 
-		PayType     string `json:"pay_type"`     // 支付方式
-		Amount      string `json:"amount"`       // 金额
-		TradeAmount string `json:"trade_amount"` // 真实订单需要支付金额
+	PayType     string `json:"pay_type"`     // 支付方式
+	Amount      string `json:"amount"`       // 金额
+	TradeAmount string `json:"trade_amount"` // 真实订单需要支付金额
 
-		Uri    string `json:"uri"`    // 支付跳转地址
-		Qrcode string `json:"qrcode"` // 支付二维码内容
-		Scheme string `json:"scheme"` // 唤起支付的地址
-	} `json:"data"`
+	Uri    string `json:"uri"`    // 支付跳转地址
+	Qrcode string `json:"qrcode"` // 支付二维码内容
+	Scheme string `json:"scheme"` // 唤起支付的地址
 }
 
 // 检查订单支付状态
 type OrderStatusReq struct {
-	OrderId    string `json:"order_id"`
 	OutOrderId string `json:"out_order_id"`
 	Pid        int32  `json:"pid"`
+	Sign       string `json:"sign"`
 }
 
 // 订单状态
 type OrderStatusRes struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    struct {
-		Status     int32  `json:"status"`
-		ExpireTime int    `json:"expire_time"`
-		ReturnUri  string `json:"return_uri,omitempty"`
-	} `json:"data"`
+	Status     int32  `json:"status"`
+	ExpireTime int    `json:"expire_time"`
+	ReturnUri  string `json:"return_uri,omitempty"`
+}
+
+// 回调处理
+type OrderNotifyCallback struct {
+	Pid         string `json:"pid" url:"pid"`
+	TradeNo     string `json:"trade_no" url:"trade_no"`
+	OutTradeNo  string `json:"out_trade_no" url:"out_trade_no"`
+	PayType     string `json:"pay_type" url:"pay_type"`
+	Name        string `json:"name" url:"name"`
+	Amount      int    `json:"amount" url:"amount"`
+	TradeAmount int    `json:"trade_amount" url:"trade_amount"`
+	Param       string `json:"param" url:"param"`
+	Sign        string `json:"sign" url:"sign"`
+	Status      int    `json:"status" url:"status"`
 }

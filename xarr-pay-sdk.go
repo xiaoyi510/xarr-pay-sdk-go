@@ -29,6 +29,21 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 	req.Pid = s.pid
 	req.Sign = GenerateSign(req, s.token)
 
+	data, err := s.do(req, "order/create")
+	res := &ResponseData{}
+	err = json.Unmarshal(data, res)
+	if err != nil {
+		return nil, err
+	}
+	if res.Code != 0 {
+		return nil, errors.New(res.Message)
+	}
+
+	return res.Data.(*OrderCreateRes), nil
+}
+
+func (s *XArrPay) do(req interface{}, api string) ([]byte, error) {
+
 	marshal, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -37,7 +52,7 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 	// 请求支付通道
 	client := http.Client{}
 
-	response, err := client.Post(s.uri+"/api/order/create", "text/json", bytes.NewReader(marshal))
+	response, err := client.Post(s.uri+"/xpay/"+api, "text/json", bytes.NewReader(marshal))
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +62,23 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 		return nil, err
 	}
 	log.Println(string(data))
-	res := &OrderCreateRes{}
+
+	return data, nil
+}
+
+// 获取订单状态
+// @orderId 为商户ID
+func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusRes, error) {
+	req := &OrderStatusReq{}
+	req.Pid = s.pid
+	req.OutOrderId = orderId
+	req.Sign = GenerateSign(req, s.token)
+
+	data, err := s.do(req, "order/status")
+	if err != nil {
+		return nil, err
+	}
+	res := &ResponseData{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -56,11 +87,13 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 		return nil, errors.New(res.Message)
 	}
 
-	return res, nil
+	return res.Data.(*OrderStatusRes), nil
 }
 
-// 获取订单状态
-// @orderId 为商户ID
-func (s *XArrPay) GetOrderStatus(orderId string) {
-
+// 处理回调事件
+func (s *XArrPay) CallbackCheck(req *OrderNotifyCallback) error {
+	if req.Sign != GenerateSign(req, s.token) {
+		return errors.New("校验失败")
+	}
+	return nil
 }

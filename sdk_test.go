@@ -35,5 +35,9 @@ func TestCreateOrder(t *testing.T) {
 func TestGetOrderInfo(t *testing.T) {
 	xarr := getSdk()
 
-	xarr.GetOrderStatus("123456222")
+	status, err := xarr.GetOrderStatus("123456222")
+	if err != nil {
+		return
+	}
+	log.Println(status)
 }
