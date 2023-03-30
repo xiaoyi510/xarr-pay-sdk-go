@@ -21,8 +21,14 @@ type OrderCreateReq struct {
 	Sign       string `p:"sign" json:"sign" v:"required#签名不能为空"`
 }
 
-// 创建订单响应
 type OrderCreateRes struct {
+	Code    int              `json:"code"`
+	Message string           `json:"message"`
+	Data    *OrderCreateData `json:"data"`
+}
+
+// 创建订单响应
+type OrderCreateData struct {
 	TradeNo    string `json:"trade_no"`     // 平台支付订单号
 	OutTradeNo string `json:"out_trade_no"` // 商户订单号
 	ExpireTime int    `json:"expire_time"`  // 订单支付超时时间
@@ -44,7 +50,14 @@ type OrderStatusReq struct {
 }
 
 // 订单状态
+
 type OrderStatusRes struct {
+	Code    int              `json:"code"`
+	Message string           `json:"message"`
+	Data    *OrderStatusData `json:"data"`
+}
+
+type OrderStatusData struct {
 	Status     int32  `json:"status"`
 	ExpireTime int    `json:"expire_time"`
 	ReturnUri  string `json:"return_uri,omitempty"`

@@ -25,12 +25,12 @@ func New(uri string, pid int32, token string) *XArrPay {
 }
 
 // 创建订单
-func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
+func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateData, error) {
 	req.Pid = s.pid
 	req.Sign = GenerateSign(req, s.token)
 
 	data, err := s.do(req, "order/create")
-	res := &ResponseData{}
+	res := &OrderCreateRes{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 		return nil, errors.New(res.Message)
 	}
 
-	return res.Data.(*OrderCreateRes), nil
+	return res.Data, nil
 }
 
 func (s *XArrPay) do(req interface{}, api string) ([]byte, error) {
@@ -68,7 +68,7 @@ func (s *XArrPay) do(req interface{}, api string) ([]byte, error) {
 
 // 获取订单状态
 // @orderId 为商户ID
-func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusRes, error) {
+func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusData, error) {
 	req := &OrderStatusReq{}
 	req.Pid = s.pid
 	req.OutOrderId = orderId
@@ -78,7 +78,7 @@ func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusRes, error) {
 	if err != nil {
 		return nil, err
 	}
-	res := &ResponseData{}
+	res := &OrderStatusRes{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusRes, error) {
 		return nil, errors.New(res.Message)
 	}
 
-	return res.Data.(*OrderStatusRes), nil
+	return res.Data, nil
 }
 
 // 处理回调事件

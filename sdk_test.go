@@ -15,7 +15,7 @@ func TestCreateOrder(t *testing.T) {
 
 	orderReq := &OrderCreateReq{
 		PayType:    PAY_TYPE_ALIPAY,
-		OutTradeNo: "123456222",
+		OutTradeNo: "123456222y",
 		NotifyUrl:  "",
 		ReturnUrl:  "",
 		Name:       "测试支付",
