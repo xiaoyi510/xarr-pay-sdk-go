@@ -17,8 +17,8 @@ type OrderCreateReq struct {
 
 // 创建订单响应
 type OrderCreateRes struct {
-	Code    int
-	Message string
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 	Data    struct {
 		TradeNo    string `json:"trade_no"`     // 平台支付订单号
 		OutTradeNo string `json:"out_trade_no"` // 商户订单号
@@ -31,5 +31,23 @@ type OrderCreateRes struct {
 		Uri    string `json:"uri"`    // 支付跳转地址
 		Qrcode string `json:"qrcode"` // 支付二维码内容
 		Scheme string `json:"scheme"` // 唤起支付的地址
+	} `json:"data"`
+}
+
+// 检查订单支付状态
+type OrderStatusReq struct {
+	OrderId    string `json:"order_id"`
+	OutOrderId string `json:"out_order_id"`
+	Pid        int32  `json:"pid"`
+}
+
+// 订单状态
+type OrderStatusRes struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    struct {
+		Status     int32  `json:"status"`
+		ExpireTime int    `json:"expire_time"`
+		ReturnUri  string `json:"return_uri,omitempty"`
 	} `json:"data"`
 }
