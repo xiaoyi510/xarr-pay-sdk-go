@@ -1,4 +1,4 @@
-module xarr-pay-sdk
+module github.com/xiaoyi510/xarr_pay_sdk
 
 go 1.18
 

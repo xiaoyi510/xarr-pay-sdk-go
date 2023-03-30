@@ -60,6 +60,7 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateRes, error) {
 }
 
 // 获取订单状态
-func (s *XArrPay) GetOrderStatus() {
+// @orderId 为商户ID
+func (s *XArrPay) GetOrderStatus(orderId string) {
 
 }

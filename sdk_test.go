@@ -5,8 +5,13 @@ import (
 	"testing"
 )
 
+func getSdk() *XArrPay {
+	return New("http://127.0.0.1:24017", 10000, "")
+
+}
+
 func TestCreateOrder(t *testing.T) {
-	xarr := New("http://127.0.0.1:24017", 10000, "")
+	xarr := getSdk()
 
 	orderReq := &OrderCreateReq{
 		PayType:    PAY_TYPE_ALIPAY,
@@ -25,4 +30,10 @@ func TestCreateOrder(t *testing.T) {
 		return
 	}
 	log.Println("支付成功", order)
+}
+
+func TestGetOrderInfo(t *testing.T) {
+	xarr := getSdk()
+
+	xarr.GetOrderStatus("123456222")
 }
