@@ -35,7 +35,7 @@ func (s *XArrPay) CreateOrder(req *OrderCreateReq) (*OrderCreateData, error) {
 	if err != nil {
 		return nil, err
 	}
-	if res.Code != 0 {
+	if res.Code != 200 {
 		return nil, errors.New(res.Message)
 	}
 
@@ -83,7 +83,7 @@ func (s *XArrPay) GetOrderStatus(orderId string) (*OrderStatusData, error) {
 	if err != nil {
 		return nil, err
 	}
-	if res.Code != 0 {
+	if res.Code != 200 {
 		return nil, errors.New(res.Message)
 	}
 
